@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.neuedu.dao.DeptMapper">
+
+    <!--一的一方先写个查询，注意接口中不用定义相关方法  -->
+
+    <select id="getDeptByIdLazy"  parameterType="Integer" resultType="Dept">
+        select deptno,dname,loc from t_dept where deptno=#{deptno}
+    </select>
+</mapper>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.neuedu.dao.EmpMapper">
+
+    <resultMap id="resultmap_emp_dept" type="Emp">
+        <id property="empno" column="empno"></id>
+        <result property="hiredate" column="hiredate"></result>
+        <result property="ename" column="ename"></result>
+        <result property="job" column="job"></result>
+        <result property="sal" column="sal"></result>
+        <association property="dept" javaType="Dept" column="deptno">
+            <id property="deptno" column="deptno"></id>
+            <result property="dname" column="dname"></result>
+            <result property="loc" column="loc"></result>
+        </association>
+
+    </resultMap>
+
+    <resultMap id="resultmap_emp_dept_lazy" type="Emp">
+        <id property="empno" column="empno"></id>
+        <result property="hiredate" column="hiredate"></result>
+        <result property="ename" column="ename"></result>
+        <result property="job" column="job"></result>
+        <result property="sal" column="sal"></result>
+        <association property="dept" javaType="Dept" column="deptno" select="org.neuedu.dao.DeptMapper.getDeptByIdLazy">
+
+        </association>
+
+    </resultMap>
+
+    <resultMap id="resultmap_dept_emp" type="Dept">
+        <id property="deptno" column="deptno"></id>
+        <result property="dname" column="dname"></result>
+        <result property="loc" column="loc"></result>
+        <collection property="emps" ofType="emp">
+            <id property="empno" column="empno"></id>
+            <result property="hiredate" column="hiredate"></result>
+            <result property="ename" column="ename"></result>
+            <result property="job" column="job"></result>
+            <result property="sal" column="sal"></result>
+
+        </collection>
+
+    </resultMap>
+
+<!--    //查询员工信息，同时关联查询部门信息-->
+<!--    public Emp selectEmpById(Integer empno);-->
+    <select id="selectEmpById" parameterType="Integer" resultMap="resultmap_emp_dept">
+        select e.empno,e.ename,e.hiredate,e.job,e.sal,
+                d.deptno,d.dname,d.loc
+        from t_emp e,t_dept d
+        where e.deptno=d.deptno
+        and e.empno=#{empno}
+    </select>
+
+<!--    //查询部门信息，同时关联查询员工信息-->
+<!--    public Dept selectDeptById(Integer deptno);-->
+
+    <select id="selectDeptById" parameterType="Integer" resultMap="resultmap_dept_emp">
+        select d.deptno,d.dname,d.loc,
+		        e.empno,e.ename,e.hiredate,e.job,e.sal
+        from t_dept d,t_emp e
+        where e.deptno=d.deptno
+        and d.deptno=#{deptno}
+
+    </select>
+
+<!--    public Emp selectEmpByIdLazy(Integer empno);-->
+    <select id="selectEmpByIdLazy" parameterType="Integer" resultMap="resultmap_emp_dept_lazy">
+        select e.empno,e.ename,e.hiredate,e.job,e.sal,e.deptno
+
+        from t_emp e
+        where
+         e.empno=#{empno}
+    </select>
+
+
+
+</mapper>

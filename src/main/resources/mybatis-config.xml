@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <properties resource="produce-db.properties"></properties>
+
+    <settings>
+        <setting name="logImpl" value="log4j"/>
+        <!-- 如果aggressiveLazyLoading为true，那么lazyLoadingEnabled即使为true也无效。 -->
+            <setting name="lazyLoadingEnabled" value="true"/>
+            <setting name="aggressiveLazyLoading" value="false"/>
+    </settings>
+
+    <typeAliases>
+        <package name="org.neuedu.domain"/>
+    </typeAliases>
+
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${mariadb.driver}"/>
+                <property name="url" value="${mariadb.url}"/>
+                <property name="username" value="${mariadb.username}"/>
+                <property name="password" value="${mariadb.password}"/>
+            </dataSource>
+        </environment>
+
+
+
+    </environments>
+
+    <mappers>
+
+        <mapper resource="EmpMapper.xml"/>
+        <mapper resource="DeptMapper.xml"/>
+
+    </mappers>
+    
+   
+
+</configuration>
